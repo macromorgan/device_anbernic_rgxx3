@@ -1,0 +1,17 @@
+# Non-dynamic, boot critical partitions
+/dev/block/by-name/boot		/boot		emmc			defaults					recoveryonly,slotselect,first_stage_mount
+/dev/block/by-name/init_boot	/init_boot	emmc			defaults					recoveryonly,slotselect,first_stage_mount
+/dev/block/by-name/vendor_boot	/vendor_boot	emmc			defaults					recoveryonly,slotselect
+system				/system		ext4			noatime,ro,errors=panic				wait,logical,first_stage_mount,slotselect
+# Add all non-dynamic partitions except system, after this comment
+/dev/block/by-name/userdata	/data		@userdata_fs_type@	nodev,noatime,nosuid,@userdata_mount_flags@	latemount,wait,check,quota,formattable,keydirectory=/metadata/vold/metadata_encryption,@userdata_fsmgr_flags@
+/dev/block/by-name/metadata	/metadata	f2fs			nodev,noatime,nosuid				wait,check,formattable,first_stage_mount
+/dev/block/by-name/misc		/misc		emmc			defaults					defaults
+# Add all dynamic partitions except system, after this comment
+product				/product	ext4			noatime,ro,errors=panic				wait,logical,first_stage_mount,slotselect
+system_ext			/system_ext	ext4			noatime,ro,errors=panic				wait,logical,first_stage_mount,slotselect
+vendor				/vendor		ext4			noatime,ro,errors=panic				wait,logical,first_stage_mount,slotselect
+vendor_dlkm			/vendor_dlkm	ext4			noatime,ro,errors=panic				wait,logical,first_stage_mount,slotselect
+system_dlkm			/system_dlkm	ext4			noatime,ro,errors=panic				wait,logical,first_stage_mount,slotselect
+# ZRAM
+/dev/block/zram0		none		swap			defaults					zramsize=75%
